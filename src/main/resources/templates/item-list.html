@@ -1,0 +1,13 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Hello Thymeleaf</title>
+</head>
+<body>
+<h1>Item List</h1>
+<ul th:each="item : ${items}" th:object="${item}">
+    <li><a href="http://google.co.jp" th:href="@{'/items/' + *{code}}" th:text="|*{code} *{name} *{createdAt}|">dummy</a></li>
+</ul>
+</body>
+</html>
