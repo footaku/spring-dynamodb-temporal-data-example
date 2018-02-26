@@ -13,7 +13,6 @@ import java.io.Serializable
  */
 @DynamoDBTable(tableName = "item")
 class Item(
-
         @get:DynamoDBAttribute
         var name: String = "",
         @get:DynamoDBAttribute
