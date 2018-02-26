@@ -56,7 +56,8 @@ class ItemId(
         var code: String = ""
 ) : Serializable {
     companion object {
-        private val serialVersionUid: Long = 1
+        @JvmStatic
+        private val serialVersionUID: Long = 239
     }
 
     override fun toString(): String {
