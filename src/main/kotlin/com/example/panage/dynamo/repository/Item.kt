@@ -28,7 +28,7 @@ class Item(
 
         @get:DynamoDBAttribute
         var createdAt: String = ""
-): Serializable {
+) : Serializable {
     companion object {
         @JvmStatic
         private val serialVersionUID: Long = 1L
