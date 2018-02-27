@@ -1,13 +1,14 @@
 package com.example.panage.dynamo.controller
 
 import com.example.panage.dynamo.repository.Item
-import com.example.panage.dynamo.repository.ItemId
 import com.example.panage.dynamo.repository.ItemRepository
 import com.example.panage.dynamo.util.DateTimeHolder
 import com.example.panage.dynamo.util.UUIDGenerator
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
+import org.springframework.validation.BindingResult
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 
 /**
@@ -40,13 +41,16 @@ class Items {
     @PostMapping("{code}")
     fun updateItem(
             @PathVariable code: String,
-            @ModelAttribute name: String,
-            @ModelAttribute price: String,
+            @Validated item: Item,
+            bindingResult: BindingResult,
             model: Model
     ): String {
-        val item = Item(name = name).setId(UUIDGenerator.random().toString()).setCode(code)
-        item.createdAt = DateTimeHolder.get().toString()
-        itemRepository.save(item)
+        val newItem = Item(name = item.name, price = item.price)
+                .setId(UUIDGenerator.random().toString())
+                .setCode(code)
+        newItem.price = item.price
+        newItem.createdAt = DateTimeHolder.get().toString()
+        itemRepository.save(newItem)
         return "redirect:/items"
     }
 
