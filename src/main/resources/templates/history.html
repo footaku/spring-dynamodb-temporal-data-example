@@ -5,14 +5,18 @@
     <title>Hello Thymeleaf</title>
 </head>
 <body>
-<h1>Item List</h1>
+<h1>History</h1>
+<!--<ul th:each="item : ${items}" th:object="${item}">-->
+    <!--<li><a href="http://google.co.jp" th:href="@{'/items/' + *{code}}" th:text="|*{code} *{name} *{createdAt}|">dummy</a></li>-->
+<!--</ul>-->
+
 <table border="1">
     <tr>
         <th>UUID</th><th>code</th><th>name</th><th>price</th><th>createdAt</th>
     </tr>
     <tr th:each="item : ${items}" th:object="${item}">
         <td th:text="*{id}">UUID</td>
-        <td><a href="http://google.co.jp" th:href="@{'/items/' + *{code}}" th:text="*{code}">code</a></td>
+        <td th:text="*{code}">code</td>
         <td th:text="*{name}">name</td>
         <td th:text="*{price}">price</td>
         <td th:text="*{createdAt}">createdAt</td>

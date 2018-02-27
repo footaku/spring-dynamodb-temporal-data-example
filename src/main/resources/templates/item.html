@@ -6,6 +6,7 @@
 </head>
 <body>
 <h1 th:text="${item.name}">dummy</h1>
+<h5><a th:href="@{'/items/' + *{code}} + '/histories'">histories...</a></h5>
 <form method="post" th:action="@{'/items/' + ${code}}">
 <ul>
     <li th:text="${item.code}">dummy</li>
