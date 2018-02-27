@@ -42,6 +42,13 @@ class Items {
         return "item"
     }
 
+    @GetMapping("{code}/histories")
+    fun histories(@PathVariable code: String, model: Model): String {
+        val items = itemRepository.findByCode(code).sortedBy { it.createdAt }.reversed()
+        model.addAttribute("items", items)
+        return "history"
+    }
+
     @PostMapping("{code}")
     fun updateItem(
             @PathVariable code: String,
