@@ -24,6 +24,10 @@ class Items {
     @GetMapping
     fun items(model: Model): String {
         val items = itemRepository.findAll()
+                .groupBy { it.getCode() }
+                .map { it.value.maxBy { it.createdAt } }
+                .toList()
+
         model.addAttribute("items", items)
         return "item-list"
     }
