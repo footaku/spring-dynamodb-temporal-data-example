@@ -23,10 +23,22 @@ class InitialDataConfiguration {
 
     @PostConstruct
     fun initItemTable() {
-        dynamoDB.createTable(
+        val createItemTableRequest =
                 DynamoDBMapper(dynamoDB).generateCreateTableRequest(Item::class.java)
                         .withProvisionedThroughput(ProvisionedThroughput(20L, 20L))
-        )
+
+        dynamoDB.createTable(createItemTableRequest)
+
+//        LocalSecondaryIndex().withIndexName("itemCodeIndex")
+//                .withKeySchema(
+//                        listOf(
+//                                KeySchemaElement().withAttributeName("code").withKeyType(KeyType.HASH),
+//                                KeySchemaElement().withAttributeName("createdAt").withKeyType(KeyType.RANGE)
+//                        )
+//                )
+//                .withProjection(
+//
+//                )
 
 //        dynamoDB.updateTable(
 //                UpdateTableRequest()
@@ -41,10 +53,10 @@ class InitialDataConfiguration {
 
         val now = LocalDateTime.now()
         itemRepository.saveAll(listOf(
-                Item("a-b-c", 100L, now.toString()).setId(UUID.randomUUID().toString()).setCode("ABC"),
-                Item("b-c-d", 100L, now.toString()).setId(UUID.randomUUID().toString()).setCode("BCD"),
-                Item("c-d-e", 100L, now.toString()).setId(UUID.randomUUID().toString()).setCode("CDE"),
-                Item("d-e-f", 100L, now.toString()).setId(UUID.randomUUID().toString()).setCode("DEF")
+                Item(UUID.randomUUID().toString(), "a-b-c", 100L).setCode("ABC").setCreatedAt(now.toString()),
+                Item(UUID.randomUUID().toString(), "b-c-d", 100L).setCode("BCD").setCreatedAt(now.toString()),
+                Item(UUID.randomUUID().toString(), "c-d-e", 100L).setCode("CDE").setCreatedAt(now.toString()),
+                Item(UUID.randomUUID().toString(), "d-e-f", 100L).setCode("DEF").setCreatedAt(now.toString())
         ))
     }
 }

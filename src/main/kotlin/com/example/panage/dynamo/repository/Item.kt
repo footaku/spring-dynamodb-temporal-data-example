@@ -8,7 +8,7 @@ import org.springframework.data.annotation.Id
 import java.io.Serializable
 import javax.validation.constraints.Max
 import javax.validation.constraints.Min
-import javax.validation.constraints.NotNull
+import javax.validation.constraints.NotEmpty
 
 
 /**
@@ -16,18 +16,19 @@ import javax.validation.constraints.NotNull
  */
 @DynamoDBTable(tableName = "item")
 class Item(
-        @NotNull
+        @NotEmpty
+        @get:DynamoDBAttribute
+        var id: String = "",
+
+        @NotEmpty
         @get:DynamoDBAttribute
         var name: String = "",
 
-        @NotNull
+        @NotEmpty
         @Min(10)
         @Max(1000)
         @get:DynamoDBAttribute
-        var price: Long = 0L,
-
-        @get:DynamoDBAttribute
-        var createdAt: String = ""
+        var price: Long = 0L
 ) : Serializable {
     companion object {
         @JvmStatic
@@ -37,19 +38,7 @@ class Item(
     @Id
     private lateinit var itemId: ItemId
 
-    @DynamoDBHashKey(attributeName = "id")
-    fun getId(): String = this.itemId.id
-
-    fun setId(id: String): Item {
-        if (!this::itemId.isInitialized) {
-            this.itemId = ItemId()
-        }
-        itemId.id = id
-
-        return this
-    }
-
-    @DynamoDBRangeKey(attributeName = "code")
+    @DynamoDBHashKey(attributeName = "code")
     fun getCode(): String = this.itemId.code
 
     fun setCode(code: String): Item {
@@ -60,13 +49,25 @@ class Item(
 
         return this
     }
+
+    @DynamoDBRangeKey(attributeName = "createdAt")
+    fun getCreatedAt(): String = this.itemId.createdAt
+
+    fun setCreatedAt(createdAt: String): Item {
+        if (!this::itemId.isInitialized) {
+            this.itemId = ItemId()
+        }
+        itemId.createdAt = createdAt
+
+        return this
+    }
 }
 
 class ItemId(
         @get:DynamoDBHashKey
-        var id: String = "",
+        var code: String = "",
         @get:DynamoDBRangeKey
-        var code: String = ""
+        var createdAt: String = ""
 ) : Serializable {
     companion object {
         @JvmStatic
@@ -74,7 +75,7 @@ class ItemId(
     }
 
     override fun toString(): String {
-        return "ItemId(id='$id', code='$code')"
+        return "ItemId(code='$code', createdAt='$createdAt')"
     }
 
 }
