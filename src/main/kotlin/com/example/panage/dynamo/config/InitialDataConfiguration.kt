@@ -4,6 +4,7 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDB
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput
 import com.example.panage.dynamo.repository.Item
+import com.example.panage.dynamo.repository.ItemId
 import com.example.panage.dynamo.repository.ItemRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Configuration
@@ -26,37 +27,14 @@ class InitialDataConfiguration {
         val createItemTableRequest =
                 DynamoDBMapper(dynamoDB).generateCreateTableRequest(Item::class.java)
                         .withProvisionedThroughput(ProvisionedThroughput(20L, 20L))
-
         dynamoDB.createTable(createItemTableRequest)
-
-//        LocalSecondaryIndex().withIndexName("itemCodeIndex")
-//                .withKeySchema(
-//                        listOf(
-//                                KeySchemaElement().withAttributeName("code").withKeyType(KeyType.HASH),
-//                                KeySchemaElement().withAttributeName("createdAt").withKeyType(KeyType.RANGE)
-//                        )
-//                )
-//                .withProjection(
-//
-//                )
-
-//        dynamoDB.updateTable(
-//                UpdateTableRequest()
-//                        .withTableName("item")
-//                        .withAttributeDefinitions(
-//                                listOf(
-//                                        AttributeDefinition("name", ScalarAttributeType.S),
-//                                        AttributeDefinition("price", ScalarAttributeType.S)
-//                                )
-//                        )
-//        )
 
         val now = LocalDateTime.now()
         itemRepository.saveAll(listOf(
-                Item(UUID.randomUUID().toString(), "a-b-c", 100L).setCode("ABC").setCreatedAt(now.toString()),
-                Item(UUID.randomUUID().toString(), "b-c-d", 100L).setCode("BCD").setCreatedAt(now.toString()),
-                Item(UUID.randomUUID().toString(), "c-d-e", 100L).setCode("CDE").setCreatedAt(now.toString()),
-                Item(UUID.randomUUID().toString(), "d-e-f", 100L).setCode("DEF").setCreatedAt(now.toString())
+                Item(ItemId(("ABC"), now.toString()), UUID.randomUUID().toString(), "a-b-c", 101L),
+                Item(ItemId(("BCD"), now.toString()), UUID.randomUUID().toString(), "b-c-d", 102L),
+                Item(ItemId(("CDE"), now.toString()), UUID.randomUUID().toString(), "c-d-e", 103L),
+                Item(ItemId(("DEF"), now.toString()), UUID.randomUUID().toString(), "d-e-f", 104L)
         ))
     }
 }

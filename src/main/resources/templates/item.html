@@ -10,8 +10,14 @@
 <form method="post" th:action="@{'/items/' + ${code}}">
 <ul>
     <li th:text="${item.code}">dummy</li>
-    <li><input type="text" name="name" th:value="${item.name}" value="dummy" title="name"/></li>
-    <li><input type="text" name="price" th:value="${item.price}" value="dummy" title="price"/></li>
+    <li>
+        <input type="text" name="name" th:value="${item.name}" value="dummy" title="name"/>
+        <span th:if="${#fields.hasErrors('item.name')}" th:errors="${item.name}">Name Error</span>
+    </li>
+    <li>
+        <input type="text" name="price" th:value="${item.price}" value="dummy" title="price"/>
+        <span th:if="${#fields.hasErrors('item.price')}" th:errors="${item.price}">Name Error</span>
+    </li>
 </ul>
 <input type="submit" name="update" id="update" value="update" />
 </form>

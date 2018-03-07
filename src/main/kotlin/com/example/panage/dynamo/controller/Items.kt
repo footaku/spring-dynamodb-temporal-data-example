@@ -1,6 +1,7 @@
 package com.example.panage.dynamo.controller
 
 import com.example.panage.dynamo.repository.Item
+import com.example.panage.dynamo.repository.ItemId
 import com.example.panage.dynamo.service.ItemService
 import com.example.panage.dynamo.util.DateTimeHolder
 import com.example.panage.dynamo.util.UUIDGenerator
@@ -45,11 +46,18 @@ class Items(
             bindingResult: BindingResult,
             model: Model
     ): String {
-        val newItem = Item(UUIDGenerator.random().toString(), name = item.name, price = item.price)
-                .setCode(code)
-                .setCreatedAt(DateTimeHolder.get().toString())
+        if(bindingResult.hasErrors()) {
+            return "item"
+        }
 
-        itemService.saveItem(newItem)
+        itemService.saveItem(
+                Item(
+                        ItemId(code, DateTimeHolder.get().toString()),
+                        UUIDGenerator.random().toString(),
+                        item.name,
+                        item.price
+                )
+        )
         return "redirect:/items"
     }
 
